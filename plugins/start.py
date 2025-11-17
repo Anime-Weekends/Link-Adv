@@ -16,6 +16,7 @@ from config import *
 from database.database import Seishiro
 from plugins.newpost import revoke_invite_after_5_minutes
 from helper_func import *
+from plugins.fsub import is_subscribed, not_joined
 
 logger = logging.getLogger(__name__)
 
@@ -37,40 +38,6 @@ admin = filters.create(check_admin)
 # Admin filter
 is_owner_or_admin = admin
 
-async def is_sub(client, user_id, channel_id):
-    try:
-        member = await client.get_chat_member(channel_id, user_id)
-        return member.status in {
-            ChatMemberStatus.OWNER,
-            ChatMemberStatus.ADMINISTRATOR,
-            ChatMemberStatus.MEMBER
-        }
-    except UserNotParticipant:
-        mode = await Seishiro.get_channel_mode(channel_id) or await Seishiro.get_channel_mode_all(channel_id)
-        if mode == "on":
-            exists = await Seishiro.req_user_exist(channel_id, user_id)
-            return exists
-        return False
-    except Exception as e:
-        logger.error(f"Error in is_sub(): {e}")
-        return False
-
-async def is_subscribed(client, user_id):
-    channel_ids = await Seishiro.get_fsub_channels()
-    if not channel_ids:
-        return True
-    if user_id == OWNER_ID:
-        return True
-    for cid in channel_ids:
-        if not await is_sub(client, user_id, cid):
-            mode = await Seishiro.get_channel_mode(cid) or await Seishiro.get_channel_mode_all(cid)
-            if mode == "on":
-                await asyncio.sleep(2)
-                if await is_sub(client, user_id, cid):
-                    continue
-            return False
-    return True
-    
 @Bot.on_message(filters.command('start') & filters.private)
 async def start_command(client: Bot, message: Message):
     user_id = message.from_user.id
@@ -132,24 +99,6 @@ async def start_command(client: Bot, message: Message):
                     )
 
                 async with channel_locks[channel_id]:
-                    # Check if we already have a valid link
-                    old_link_info = await get_current_invite_link(channel_id)
-                    current_time = datetime.now()
-                    
-                    if old_link_info:
-                        link_created_time = await get_link_creation_time(channel_id)
-                        if link_created_time and (current_time - link_created_time).total_seconds() < 240:  # 4 minutes
-                            # Use existing link
-                            invite_link = old_link_info["invite_link"]
-                            is_request_link = old_link_info["is_request"]
-                        else:
-                            # Revoke old link and create new one
-                            try:
-                                await client.revoke_chat_invite_link(channel_id, old_link_info["invite_link"])
-                                print(f"Revoked old {'request' if old_link_info['is_request'] else 'invite'} link for channel {channel_id}")
-                            except Exception as e:
-                                print(f"Failed to revoke old link for channel {channel_id}: {e}")
-                    
                     # Create new invite link
                     invite = await client.create_chat_invite_link(
                         chat_id=channel_id,
@@ -196,7 +145,9 @@ async def start_command(client: Bot, message: Message):
             inline_buttons = InlineKeyboardMarkup(
                 [
                     [InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                     InlineKeyboardButton("Hᴇʟᴘ •", callback_data="help")]
+                     InlineKeyboardButton("Hᴇʟᴘ •", callback_data="help")],
+                    [InlineKeyboardButton("• Fsᴜʙ Sᴇᴛᴛɪɴɢs •", callback_data="fsub"),
+                     InlineKeyboardButton("• Sᴇᴛᴛɪɴɢs •", callback_data="settings")]
                 ]
             )
             
@@ -218,123 +169,6 @@ async def start_command(client: Bot, message: Message):
     except Exception as e:
         logger.error(f"FATAL ERROR in start_command: {e}")
         await message.reply_text(f"An unexpected error occurred: {e}. Please contact the developer.")
-
-async def not_joined(client: Client, message: Message):
-    logger.debug(f"not_joined function called for user {message.from_user.id}")
-    temp = await message.reply("<b><i>ᴡᴀɪᴛ ᴀ sᴇᴄ..</i></b>")
-
-    user_id = message.from_user.id
-    buttons = []
-    count = 0
-
-    try:
-        all_channels = await Seishiro.get_fsub_channels()
-        for chat_id in all_channels:
-            await message.reply_chat_action(ChatAction.TYPING)
-
-            is_member = False
-            try:
-                member = await client.get_chat_member(chat_id, user_id)
-                is_member = member.status in {
-                    ChatMemberStatus.OWNER,
-                    ChatMemberStatus.ADMINISTRATOR,
-                    ChatMemberStatus.MEMBER
-                }
-            except UserNotParticipant:
-                is_member = False
-            except Exception as e:
-                is_member = False
-                logger.error(f"Error checking member in not_joined: {e}")
-
-            if not is_member:
-                try:
-                    if chat_id in chat_data_cache:
-                        data = chat_data_cache[chat_id]
-                    else:
-                        data = await client.get_chat(chat_id)
-                        chat_data_cache[chat_id] = data
-
-                    name = data.title
-                    mode = await Seishiro.get_channel_mode(chat_id) or await Seishiro.get_channel_mode_all(chat_id)
-
-                    if mode == "on" and not data.username:
-                        invite = await client.create_chat_invite_link(
-                            chat_id=chat_id,
-                            creates_join_request=True,
-                            expire_date=datetime.utcnow() + timedelta(seconds=FSUB_LINK_EXPIRY) if FSUB_LINK_EXPIRY else None
-                        )
-                        link = invite.invite_link
-                    else:
-                        if data.username:
-                            link = f"https://t.me/{data.username}"
-                        else:
-                            invite = await client.create_chat_invite_link(
-                                chat_id=chat_id,
-                                expire_date=datetime.utcnow() + timedelta(seconds=FSUB_LINK_EXPIRY) if FSUB_LINK_EXPIRY else None
-                            )
-                            link = invite.invite_link
-                    
-                    buttons.append([InlineKeyboardButton(text=name, url=link)])
-                    count += 1
-                    await temp.edit(f"<b>{'! ' * count}</b>")
-
-                except Exception as e:
-                    logger.error(f"Error with chat {chat_id}: {e}")
-                    await temp.edit(
-                        f"<b><i>! Eʀʀᴏʀ, Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ ᴛᴏ sᴏʟᴠᴇ ᴛʜᴇ ɪssᴜᴇs @seishiro_obito</i></b>\n"
-                        f"<blockquote expandable><b>Rᴇᴀsᴏɴ:</b> {e}</blockquote>"
-                    )
-                    return
-
-        try:
-            # Get base64_string if exists
-            text = message.text
-            base64_string = ""
-            if len(text) > 7:
-                base64_string = text.split(" ", 1)[1]
-            
-            # Create deep link with the encoded string
-            if base64_string:
-                deep_link = f"https://t.me/{client.username}?start={base64_string}"
-            else:
-                deep_link = f"https://t.me/{client.username}"
-            
-            buttons.append([
-                InlineKeyboardButton(
-                    text='• Jᴏɪɴᴇᴅ •',
-                    url=deep_link
-                )
-            ])
-        except Exception as e:
-            logger.error(f"Error creating joined button: {e}")
-            # Fallback without deep link
-            try:
-                bot_username = (await client.get_me()).username
-                buttons.append([
-                    InlineKeyboardButton(
-                        text='• Jᴏɪɴᴇᴅ •',
-                        url=f"https://t.me/{bot_username}"
-                    )
-                ])
-            except:
-                pass
-
-        text = f"<b>Yᴏᴜ {message.from_user.mention} \n\n<blockquote>Jᴏɪɴ ᴍʏ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ ᴏᴛʜᴇʀᴡɪsᴇ Yᴏᴜ ᴀʀᴇ ɪɴ ʙɪɢ sʜɪᴛ...!!</blockquote></b>"
-        await temp.delete()
-        
-        logger.debug(f"Sending final reply photo to user {user_id}")
-        await message.reply_photo(
-            photo=FSUB_PIC,
-            caption=text,
-            reply_markup=InlineKeyboardMarkup(buttons),
-        )
-
-    except Exception as e:
-        logger.error(f"Final Error in not_joined: {e}")
-        await temp.edit(
-            f"<b><i>! Eʀʀᴏʀ, Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ ᴛᴏ sᴏʟᴠᴇ ᴛʜᴇ ɪssᴜᴇs @seishiro_obito</i></b>\n"
-            f"<blockquote expandable><b>Rᴇᴀsᴏɴ:</b> {e}</blockquote>"
-        )
 
 @Bot.on_message(filters.command("broadcast") & filters.private & admin)
 async def broadcast_handler(bot: Client, m: Message):
@@ -495,3 +329,32 @@ async def delete_after_delay(msg, delay):
         await msg.delete()
     except:
         pass
+
+@Bot.on_callback_query(filters.regex("fsub"))
+async def fsub_callback(client: Bot, query: CallbackQuery):
+    await query.message.edit_text(
+        "**Fsᴜʙ Sᴇᴛᴛɪɴɢs Mᴇɴᴜ:**",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton("• Aᴅᴅ Fsᴜʙ Cʜᴀɴɴᴇʟ •", callback_data="add_fsub_channel")],
+                [InlineKeyboardButton("• Rᴇᴍᴏᴠᴇ Fsᴜʙ Cʜᴀɴɴᴇʟ •", callback_data="remove_fsub_channel")],
+                [InlineKeyboardButton("• Lɪsᴛ Fsᴜʙ Cʜᴀɴɴᴇʟs •", callback_data="list_fsub_channels")],
+                [InlineKeyboardButton("• Aʟʟ Cʜᴀɴɴᴇʟs •", callback_data="all_channels")],
+                [InlineKeyboardButton("• Pᴀʀᴛɪᴄᴜʟᴀʀʟʏ •", callback_data="particularly")],
+                [InlineKeyboardButton("• Bᴀᴄᴋ •", callback_data="start")]
+            ]
+        )
+    )
+
+@Bot.on_callback_query(filters.regex("settings"))
+async def settings_callback(client: Bot, query: CallbackQuery):
+    await query.message.edit_text(
+        "**Bot Settings:**",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton("• Set MongoDB URL •", callback_data="set_db_url")],
+                [InlineKeyboardButton("• Set Sticker ID •", callback_data="set_sticker_id")],
+                [InlineKeyboardButton("• Bᴀᴄᴋ •", callback_data="start")]
+            ]
+        )
+    )

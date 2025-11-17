@@ -3,26 +3,53 @@ import os
 from os import environ
 import logging
 from logging.handlers import RotatingFileHandler
+import asyncio
 
-TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8338025268:AAFyVPlVvb3tR2mbq9z0EEv5baa54XeYiMo")
-BOT_USERNAME = 'LinkkShare_bot'
-APP_ID = int(os.environ.get("APP_ID", "27322718"))
-API_HASH = os.environ.get("API_HASH", "4f6d1b67cf101aea5cf0536885aa1b82")
-OWNER_ID = int(os.environ.get("OWNER_ID", "6701907262"))
-PORT = os.environ.get("PORT", "8080")
-DB_URL = os.environ.get("DB_URI", "mongodb+srv://botskingdom2:t7ognZuINrNfH3tj@cluster0.ystdy4m.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+# Check for required environment variables
+required_vars = ["TG_BOT_TOKEN", "API_HASH", "APP_ID", "DB_URI"]
+for var in required_vars:
+    if not environ.get(var):
+        raise ValueError(f"Missing required environment variable: {var}")
+
+DB_URL = environ.get("DB_URI")
 DB_NAME = os.environ.get("DB_NAME", "link_1_bro")
+
+from database.database import Seishiro
+
+async def load_settings():
+    DB_URL_DB = await Seishiro.get_setting("DB_URI")
+    STICKER_ID_DB = await Seishiro.get_setting("STICKER_ID")
+    return DB_URL_DB, STICKER_ID_DB
+
+# Load settings from database
+loop = asyncio.get_event_loop()
+DB_URL_DB, STICKER_ID_DB = loop.run_until_complete(load_settings())
+
+DB_URL = DB_URL_DB or DB_URL
+STICKER_ID = STICKER_ID_DB or environ.get("STICKER_ID")
+
+
+TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
+BOT_USERNAME = 'LinkkShare_bot'
+APP_ID = int(os.environ.get("APP_ID"))
+API_HASH = os.environ.get("API_HASH")
+OWNER_ID = int(os.environ.get("OWNER_ID"))
+PORT = os.environ.get("PORT", "8080")
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "40"))
-STICKER_ID = os.environ.get("STICKER_ID", "CAACAgUAAxkBAAEPQLRorzC7PcWDMNuR6UkaxaKLxtsY-gACERUAApg9qVU2Cwv5mdxKhDYE")  # Replace with your sticker ID
-COMMAND_PHOTO = os.environ.get("COMMAND_PHOTO", "https://ibb.co/mVkSySr7")  # Replace with your photo URL
-START_PIC = os.environ.get("START_PIC", "https://ibb.co/mVkSySr7")
-START_MSG = os.environ.get("START_MESSAGE", "Hᴇʟʟᴏ {mention} ~\n\n <i><b><blockquote>Iᴀᴍ ᴀ ᴀᴅᴠᴀɴᴄᴇ ʟɪɴᴋ sʜᴀʀᴇ ʙᴏᴛ ᴛʜʀᴏᴜɢʜ ᴡʜɪᴄʜ ʏᴏᴜ ᴄᴀɴ ɢᴇᴛ ᴛʜᴇ ʟɪɴᴋs ᴏғ sᴘᴇᴄɪғɪᴄ ᴄʜᴀɴɴᴇʟs ᴡʜɪᴄʜ sᴀᴠᴇ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟs ғʀᴏᴍ ᴄᴏᴘʏʀɪɡʜᴛ.</blockquote></b></i>")
-ABOUT_TXT = os.environ.get("HELP_MESSAGE", "<i><b><blockquote>◈ ᴄʀᴇᴀᴛᴏʀ: <a href=https://t.me/RexBots_Official>RexBots</a>\n◈ ꜰᴏᴜɴᴅᴇʀ ᴏꜰ : <a href=https://t.me/RexBots_Official>RexBOTS</a>\n◈ ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href='https://t.me/about_zani/117'>ZANI</a>\n◈ ᴅᴀᴛᴀʙᴀsᴇ: <a href='https://www.mongodb.com/docs/'>ᴍᴏɴɢᴏ ᴅʙ</a>\n» ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href='https://t.me/about_zani/117'>ZANI</a></blockquote></b></i>")
-HELP_TXT =  os.environ.get("HELP_MESSAGE", "⁉️ Hᴇʟʟᴏ {mention} ~\n\n <b><blockquote expandable>➪ I ᴀᴍ ᴀ ᴘʀɪᴠᴀᴛᴇ ʟɪɴᴋ sʜᴀʀɪɴɢ ʙᴏᴛ, ᴍᴇᴀɴᴛ ᴛᴏ ᴘʀᴏᴠɪᴅᴇ ʟɪɴᴋ ғᴏʀ sᴘᴇᴄɪғɪᴄ ᴄʜᴀɴɴᴇʟs.\n\n ➪ Iɴ ᴏʀᴅᴇʀ ᴛᴏ ɢᴇᴛ ᴛʜᴇ ʟɪɴᴋs ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴊᴏɪɴ ᴛʜᴇ ᴀʟʟ ᴍᴇɴᴛɪᴏɴᴇᴅ ᴄʜᴀɴɴᴇʟ ᴛʜᴀᴛ ɪ ᴘʀᴏᴠɪᴅᴇ ʏᴏᴜ ᴛᴏ ᴊᴏɪɴ. Yᴏᴜ ᴄᴀɴ ɴᴏᴛ ᴀᴄᴄᴇss ᴏʀ ɢᴇᴛ ᴛʜᴇ ғɪʟᴇs ᴜɴʟᴇss ʏᴏᴜ ᴊᴏɪɴᴇᴅ ᴀʟʟ ᴄʜᴀɴɴᴇʟs.\n\n ‣ /help - Oᴘᴇɴ ᴛʜɪs ʜᴇʟᴘ ᴍᴇssᴀɢᴇ !</blockquote></b>")
+COMMAND_PHOTO = os.environ.get("COMMAND_PHOTO")
+START_PIC = os.environ.get("START_PIC")
+START_MSG = os.environ.get("START_MESSAGE")
+ABOUT_TXT = os.environ.get("HELP_MESSAGE")
+HELP_TXT =  os.environ.get("HELP_MESSAGE")
 BOT_STATS_TEXT = "<i><b><blockquote>ʙᴏᴛ ᴜᴘᴛɪᴍᴇ\n{uptime}</blockquote></b></i>"
 USER_REPLY_TEXT = "<i><b><blockquote>⚠️ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ ᴍᴀsᴛᴇʀ.</blockquote></b></i>"
 LOG_FILE_NAME = "links-sharingbot.txt"
-DATABASE_CHANNEL = int(os.environ.get("DATABASE_CHANNEL", "-1002257657458"))
+DATABASE_CHANNEL = int(os.environ.get("DATABASE_CHANNEL"))
+FSUB_SETTINGS_PIC = os.environ.get("FSUB_SETTINGS_PIC")
+ABOUT_PIC = os.environ.get("ABOUT_PIC")
+HELP_PIC = os.environ.get("HELP_PIC")
+FSUB_PIC = os.environ.get("FSUB_PIC")
+FSUB_LINK_EXPIRY = int(os.environ.get("FSUB_LINK_EXPIRY", "300"))
 
 logging.basicConfig(
     level=logging.INFO,

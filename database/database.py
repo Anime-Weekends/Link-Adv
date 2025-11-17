@@ -12,6 +12,11 @@ class Master:
     def __init__(self, DB_URL, DB_NAME):
         self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URL)
         self.database = self.dbclient[DB_NAME]
+        self.re_init(DB_URL, DB_NAME)
+
+    def re_init(self, DB_URL, DB_NAME):
+        self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URL)
+        self.database = self.dbclient[DB_NAME]
 
         # Initialize all collections
         self.user_data = self.database['users']
@@ -22,6 +27,7 @@ class Master:
         self.fsub_data = self.database['fsub']
         self.rqst_fsub_data = self.database['request_forcesub']
         self.rqst_fsub_Channel_data = self.database['request_forcesub_channel']
+        self.settings_data = self.database['settings']
 
         # Main collection reference (for backward compatibility)
         self.col = self.user_data
@@ -498,6 +504,28 @@ class Master:
             return channel.get("original_link") if channel else None
         except Exception as e:
             logging.error(f"Error fetching original link for channel {channel_id}: {e}")
+            return None
+
+    async def set_setting(self, name: str, value: str):
+        """Set a setting in the database."""
+        try:
+            await self.settings_data.update_one(
+                {"_id": name},
+                {"$set": {"value": value}},
+                upsert=True
+            )
+            return True
+        except Exception as e:
+            logging.error(f"Error setting setting {name}: {e}")
+            return False
+
+    async def get_setting(self, name: str) -> Optional[str]:
+        """Get a setting from the database."""
+        try:
+            setting = await self.settings_data.find_one({"_id": name})
+            return setting["value"] if setting else None
+        except Exception as e:
+            logging.error(f"Error getting setting {name}: {e}")
             return None
 
 Seishiro = Master(DB_URL, DB_NAME)
