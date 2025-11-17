@@ -9,8 +9,6 @@ from plugins import web_server
 import pyrogram.utils
 from aiohttp import web
 
-pyrogram.utils.MIN_CHANNEL_ID = -1002449417637
-
 name = """
 Link share bot started ✨ Credit:- @RexBots_Official
 """
@@ -34,6 +32,7 @@ class Bot(Client):
 
         # Notify bot restart
         try:
+            await self.get_chat(DATABASE_CHANNEL)
             await self.send_photo(
                     chat_id=DATABASE_CHANNEL,
                     photo=None,
@@ -44,7 +43,7 @@ class Bot(Client):
                     )
                 )
         except Exception as e:
-            self.LOGGER(__name__).warning(f"Failed to notify owner ({OWNER_ID}) of bot start: {e}")
+            self.LOGGER(__name__).warning(f"Failed to send startup notification to DATABASE_CHANNEL ({DATABASE_CHANNEL}). Please make sure the bot is a member of the channel and the channel ID is correct. Error: {e}")
 
         self.set_parse_mode(ParseMode.HTML)
         self.LOGGER(__name__).info("Wew...Bot is running...⚡  Credit:- @RexBots_Official")

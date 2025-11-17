@@ -1,0 +1,10 @@
+# Session files
+Bot.session
+*.session
+
+# Pycache
+__pycache__/
+*.pyc
+
+# Log files
+*.txt
