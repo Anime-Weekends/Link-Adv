@@ -152,7 +152,7 @@ async def settings_callback(client: Bot, callback_query):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037))
                         ],
                         [
                             InlineKeyboardButton("Sᴇᴛᴛɪɴɢs", callback_data="settings_main")
@@ -167,7 +167,7 @@ async def settings_callback(client: Bot, callback_query):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037))
                         ]
                     ]
                 )
