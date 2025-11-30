@@ -54,7 +54,7 @@ async def settings_command(client: Client, message: Message):
             [InlineKeyboardButton("• Cʟᴏsᴇ •", callback_data="close")]
         ])
         await message.reply_photo(
-            photo="https://ibb.co/mVkSySr7",
+            photo="https://i.ibb.co/HT5p8MHP/photo-2025-11-30-12-34-15-7578495816998846488.jpg",
             caption="<b>Hᴇʏ ᴅᴜᴅᴇ...!!</b>\n <blockquote><b><i>Iᴛ's ᴀ ᴘᴏᴡᴇʀғᴜʟ sᴇᴛᴛɪɴɢs ᴍᴇɴᴜ ᴏғ ʟɪɴᴋ sʜᴀʀᴇ ʙᴏᴛ Iɴ ᴛʜɪs ʏᴏᴜ ᴄᴀɴ ᴄʜᴀɴɢᴇ ʏᴏᴜʀ sᴇᴛᴛɪɴɢs ᴇᴀsɪʟʏ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴍɪsᴛᴀᴋᴇ.</i></b></blockquote>",
             reply_markup=keyboard
         )
@@ -82,7 +82,7 @@ async def settings_callback(client: Bot, callback_query):
             ])
             await callback_query.edit_message_media(
                 InputMediaPhoto(
-                    "https://ibb.co/CsPWqnR4",
+                    "https://i.ibb.co/HT5p8MHP/photo-2025-11-30-12-34-15-7578495816998846488.jpg",
                     "<b>Hᴇʏ ᴅᴜᴅᴇ...!!</b>\n <blockquote><b><i>Iᴛ's ᴀ ᴘᴏᴡᴇʀғᴜʟ sᴇᴛᴛɪɴɢs ᴍᴇɴᴜ ᴏғ ʟɪɴᴋ sʜᴀʀᴇ ʙᴏᴛ Iɴ ᴛʜɪs ʏᴏᴜ ᴄᴀɴ ᴄʜᴀɴɢᴇ ʏᴏᴜʀ sᴇᴛᴛɪɴɢs ᴇᴀsɪʟʏ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴍɪsᴛᴀᴋᴇ.</i></b></blockquote>"),
                 reply_markup=keyboard)
 
@@ -180,7 +180,8 @@ async def settings_callback(client: Bot, callback_query):
                         username=f"@{callback_query.from_user.username}" if callback_query.from_user.username else "None",
                         mention=callback_query.from_user.mention,
                         id=callback_query.from_user.id)),
-                    reply_markup=inline_buttons
+                    reply_markup=inline_buttons,
+                    message_effect_id=5104841245755180586 #🔥
                 )
             except Exception as e:
                 print(f"Error sending start/home photo: {e}")
