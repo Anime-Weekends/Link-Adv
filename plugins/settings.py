@@ -126,7 +126,7 @@ async def settings_callback(client: Bot, callback_query):
         elif cb_data == "help":
             await callback_query.edit_message_media(
                 InputMediaPhoto(
-                    "https://ibb.co/CsPWqnR4",
+                    "https://i.ibb.co/s9bRGVjd/photo-2025-11-30-09-35-11-7578449671870218264.jpg",
                     HELP_TXT.format(
                         first=callback_query.from_user.first_name,
                         last=callback_query.from_user.last_name or "",
@@ -152,7 +152,7 @@ async def settings_callback(client: Bot, callback_query):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
                         ],
                         [
                             InlineKeyboardButton("Sᴇᴛᴛɪɴɢs", callback_data="settings_main")
@@ -167,7 +167,7 @@ async def settings_callback(client: Bot, callback_query):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
                         ]
                     ]
                 )
