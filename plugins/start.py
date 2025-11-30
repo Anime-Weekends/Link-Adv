@@ -269,7 +269,7 @@ async def start_command(client: Bot, message: Message):
                         [[InlineKeyboardButton("• ᴄʟɪᴄᴋ ʜᴇʀᴇ •", url=original_link)]]
                     )
                     return await message.reply_text(
-                        "<b><blockquote expandable>ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ! ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ</blockquote></b>",
+                        "<b><blockquote expandable>≡ Nᴏᴛᴇ : Hᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ ! ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ</blockquote></b>",
                         reply_markup=button,
                         parse_mode=ParseMode.HTML
                     )
@@ -330,7 +330,7 @@ async def start_command(client: Bot, message: Message):
                     await wait_msg.delete()
                     
                     link_share_msg = await message.reply_text(
-                        "<b><blockquote expandable>ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ! ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ</blockquote></b>",
+                        "<b><blockquote expandable>≡ Nᴏᴛᴇ : Hᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ ! ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ</blockquote></b>",
                         reply_markup=button,
                         parse_mode=ParseMode.HTML
                     )
@@ -393,7 +393,8 @@ async def start_command(client: Bot, message: Message):
                         last=message.from_user.last_name or "",
                         username="@" + message.from_user.username if message.from_user.username else None,
                         mention=message.from_user.mention,
-                        id=message.from_user.id
+                        id=message.from_user.id,
+                        message_effect_id=5104841245755180586 #🔥
                     ),
                     reply_markup=inline_buttons
                 )
