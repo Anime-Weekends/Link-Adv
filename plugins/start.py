@@ -203,10 +203,10 @@ async def start_command(client: Bot, message: Message):
     user = await Seishiro.is_user_banned(user_id)
     if user:
         keyboard = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Cᴏɴᴛᴀᴄᴛ ʜᴇʀᴇ...!!", url="https://t.me/rexbots_official")]]
+            [[InlineKeyboardButton("Cᴏɴᴛᴀᴄᴛ ʜᴇʀᴇ", url="https://t.me/RexySama")]]
         )
         return await message.reply_text(
-            "Wᴛғ ʏᴏᴜ ᴀʀᴇ ʙᴀɴɴᴇᴅ ғʀᴏᴍ ᴜsɪɴɢ ᴍᴇ ʙʏ ᴏᴜʀ ᴀᴅᴍɪɴ/ᴏᴡɴᴇʀ . Iғ ʏᴏᴜ ᴛʜɪɴᴋs ɪᴛ's ᴍɪsᴛᴀᴋᴇ ᴄʟɪᴄᴋ ᴏɴ ᴄᴏɴᴛᴀᴄᴛ ʜᴇʀᴇ...!!",
+            "<b><blockquote>›› Yᴏᴜ ᴀʀᴇ ʙᴀɴɴᴇᴅ ғʀᴏᴍ ᴜsɪɴɢ ᴍᴇ ʙʏ ᴏᴜʀ ᴀᴅᴍɪɴ / ᴏᴡɴᴇʀ . Iғ ʏᴏᴜ ᴛʜɪɴᴋs ɪᴛ's ᴍɪsᴛᴀᴋᴇ ᴄʟɪᴄᴋ ᴏɴ ᴄᴏɴᴛᴀᴄᴛ ʜᴇʀᴇ ..!!<b></blockquote>",
             reply_markup=keyboard
         )
     
@@ -238,7 +238,7 @@ async def start_command(client: Bot, message: Message):
                 except Exception as decode_error:
                     logger.error(f"Failed to decode base64 string '{base64_string}': {decode_error}")
                     return await message.reply_text(
-                        "<b><blockquote expandable>Invalid or expired invite link.</blockquote></b>",
+                        "<b><blockquote expandable>›› Iɴᴠᴀʟɪᴅ ᴏʀ ᴇxᴘɪʀᴇᴅ ɪɴᴠɪᴛᴇ ʟɪɴᴋ.</blockquote></b>",
                         parse_mode=ParseMode.HTML
                     )
                 
@@ -246,7 +246,7 @@ async def start_command(client: Bot, message: Message):
                 if not channel_id or (channel_id > 0):
                     logger.error(f"Invalid channel_id decoded: {channel_id}")
                     return await message.reply_text(
-                        "<b><blockquote expandable>Invalid or expired invite link.</blockquote></b>",
+                        "<b><blockquote expandable>›› Iɴᴠᴀʟɪᴅ ᴏʀ ᴇxᴘɪʀᴇᴅ ɪɴᴠɪᴛᴇ ʟɪɴᴋ.</blockquote></b>",
                         parse_mode=ParseMode.HTML
                     )
                 
@@ -322,7 +322,7 @@ async def start_command(client: Bot, message: Message):
                     button = InlineKeyboardMarkup([[InlineKeyboardButton("• ᴄʟɪᴄᴋ ʜᴇʀᴇ •", url=invite_link)]])
                     
                     wait_msg = await message.reply_text(
-                        "<b><i>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ...</i></b>",
+                        "<pre>待 っ て</pre>",
                         parse_mode=ParseMode.HTML
                     )
                     
@@ -336,7 +336,7 @@ async def start_command(client: Bot, message: Message):
                     )
                     
                     note_msg = await message.reply_text(
-                        "<b>⚠️ Wᴀʀɴɪɴɢ ⚠️</b>\n\n<blockquote><b><i>Tʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ɪɴ ғᴇᴡ ᴍɪɴᴜᴛᴇs. Iғ ᴛʜᴇ ʟɪɴᴋ ɪs ᴇxᴘɪʀᴇᴅ so ᴛʀʏ ᴀɢᴀɪɴ.</i></b></blockquote>",
+                        "<b><blockquote>◈ Dᴜᴇ ᴛᴏ Cᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs....</blockquote></b>\n<blockquote><b>›› Tʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ɪɴ ғᴇᴡ ᴍɪɴᴜᴛᴇs. Iғ ᴛʜᴇ ʟɪɴᴋ ɪs ᴇxᴘɪʀᴇᴅ so ᴛʀʏ ᴀɢᴀɪɴ.</b></blockquote>",
                         parse_mode=ParseMode.HTML
                     )
                     
@@ -347,7 +347,7 @@ async def start_command(client: Bot, message: Message):
             except Exception as e:
                 logger.error(f"Error processing deep link: {e}")
                 await message.reply_text(
-                    "<b><blockquote expandable>Invalid or expired invite link.</blockquote></b>",
+                    "<b><blockquote expandable>›› Iɴᴠᴀʟɪᴅ ᴏʀ ᴇxᴘɪʀᴇᴅ ɪɴᴠɪᴛᴇ ʟɪɴᴋ.</blockquote></b>",
                     parse_mode=ParseMode.HTML
                 )
                 # Normal /start (no deep link)
