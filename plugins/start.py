@@ -365,7 +365,7 @@ async def start_command(client: Bot, message: Message):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
                         ],
                         [
                             InlineKeyboardButton("Sᴇᴛᴛɪɴɢs", callback_data="settings_main")
@@ -380,7 +380,7 @@ async def start_command(client: Bot, message: Message):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
                         ]
                     ]
                 )
