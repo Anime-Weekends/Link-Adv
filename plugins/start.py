@@ -380,7 +380,7 @@ async def start_command(client: Bot, message: Message):
                         ],
                         [
                             InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("ᴅᴇᴠ", user_id=int(6266529037)
+                            InlineKeyboardButton("ᴅᴇᴠ", user_id=(6266529037)
                         ]
                     ]
                 )
