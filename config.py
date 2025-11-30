@@ -5,7 +5,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "7463031242:AAF38Y2RBxx2XhDlDUur1YhQzZrhMU8x2x8")
-BOT_USERNAME = 'REx'
+BOT_USERNAME = 'AnimeWeekendLinkBot'
 
 APP_ID = int(os.environ.get("APP_ID", "28744454"))
 API_HASH = os.environ.get("API_HASH", "debd37cef0ad1a1ce45d0be8e8c3c5e7")
@@ -13,7 +13,7 @@ API_HASH = os.environ.get("API_HASH", "debd37cef0ad1a1ce45d0be8e8c3c5e7")
 OWNER_ID = int(os.environ.get("OWNER_ID", "6266529037"))
 
 PORT = os.environ.get("PORT", "8080")
-DB_URL = os.environ.get("DB_URI", "")
+DB_URL = os.environ.get("DB_URI", "mongodb+srv://Rexybecomenice:Rexybecomenice@cluster0.4oosu31.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DB_NAME = os.environ.get("DB_NAME", "AnimeWeekendsLinkBot")
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "40"))
 
@@ -25,7 +25,7 @@ HELP_TXT =  os.environ.get("HELP_MESSAGE", "<b><blockquote>◈ 𝗖𝗢𝗣𝗬�
 FSUB_PIC = os.environ.get("FSUB_PIC", "https://i.ibb.co/Y7xZr9zd/photo-2025-11-30-09-21-11-7578446111342329860.jpg")
 FSUB_LINK_EXPIRY = 300
 LOG_FILE_NAME = "Rexbots.txt"
-DATABASE_CHANNEL = int(os.environ.get("DATABASE_CHANNEL", ""))
+DATABASE_CHANNEL = int(os.environ.get("DATABASE_CHANNEL", "-1003415022924"))
 
 logging.basicConfig(
     level=logging.INFO,
