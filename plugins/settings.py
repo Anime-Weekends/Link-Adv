@@ -114,12 +114,12 @@ async def settings_callback(client: Bot, callback_query):
             user = await client.get_users(OWNER_ID)
             await callback_query.edit_message_media(
                 InputMediaPhoto(
-                    "https://ibb.co/DHqBS4V7",
+                    "https://i.ibb.co/C5gLT1J2/photo-2025-11-30-09-24-34-7578446935976050704.jpg",
                     ABOUT_TXT
                 ),
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton('• ʙᴀᴄᴋ', callback_data='start'), 
-                     InlineKeyboardButton('ᴄʟᴏsᴇ •', callback_data='close')]
+                    [InlineKeyboardButton('Bᴀᴄᴋ', callback_data='start'), 
+                     InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close')]
                 ])
             )
 
@@ -134,8 +134,8 @@ async def settings_callback(client: Bot, callback_query):
                         mention=callback_query.from_user.mention,
                         id=callback_query.from_user.id)),
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton('• ʙᴀᴄᴋ', callback_data='start'), 
-                     InlineKeyboardButton('ᴄʟᴏsᴇ •', callback_data='close')]
+                    [InlineKeyboardButton('Bᴀᴄᴋ', callback_data='start'), 
+                     InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close')]
                 ])
             )
         
@@ -148,9 +148,11 @@ async def settings_callback(client: Bot, callback_query):
                 # Show Settings button for admins/owner
                 inline_buttons = InlineKeyboardMarkup(
                     [
+                        [   InlineKeyboardButton("ᴄᴏᴘʏʀɪɢʜᴛ ʟᴀᴡ", callback_data="help")
+                        ],
                         [
-                            InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("Hᴇʟᴘ •", callback_data="help")
+                            InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
+                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
                         ],
                         [
                             InlineKeyboardButton("Sᴇᴛᴛɪɴɢs", callback_data="settings_main")
@@ -161,9 +163,11 @@ async def settings_callback(client: Bot, callback_query):
                 # Hide Settings for normal users
                 inline_buttons = InlineKeyboardMarkup(
                     [
+                        [   InlineKeyboardButton("ᴄᴏᴘʏʀɪɢʜᴛ ʟᴀᴡ", callback_data="help")
+                        ],
                         [
-                            InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("Hᴇʟᴘ •", callback_data="help")
+                            InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
+                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
                         ]
                     ]
                 )
