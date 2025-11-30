@@ -361,9 +361,11 @@ async def start_command(client: Bot, message: Message):
                 # Show Settings button for admins/owner
                 inline_buttons = InlineKeyboardMarkup(
                     [
+                        [   InlineKeyboardButton("ᴄᴏᴘʏʀɪɢʜᴛ ʟᴀᴡ", callback_data="help")
+                        ],
                         [
-                            InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("Hᴇʟᴘ •", callback_data="help")
+                            InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
+                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
                         ],
                         [
                             InlineKeyboardButton("Sᴇᴛᴛɪɴɢs", callback_data="settings_main")
@@ -374,9 +376,11 @@ async def start_command(client: Bot, message: Message):
                 # Hide Settings for normal users
                 inline_buttons = InlineKeyboardMarkup(
                     [
+                        [   InlineKeyboardButton("ᴄᴏᴘʏʀɪɢʜᴛ ʟᴀᴡ", callback_data="help")
+                        ],
                         [
-                            InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
-                            InlineKeyboardButton("Hᴇʟᴘ •", callback_data="help")
+                            InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about"),
+                            InlineKeyboardButton("ᴅᴇᴠ", callback_data="help")
                         ]
                     ]
                 )
